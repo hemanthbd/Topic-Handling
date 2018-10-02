@@ -44,6 +44,7 @@ data = []
 results = []
 
 
+print("\nOpening Input json file")
 # Open the Input .json file which contains the documents
 with open('topic_modeling_data.json') as f:
 	dic = [json.loads(line) for line in f]
@@ -57,24 +58,28 @@ for i in range(0,len(dic)):
 # Loop to convert into Lowercase
 for i in range(0,len(doc_list)):
 	raw.append(doc_list[i].lower())
-print('Original',len(raw))
+print('\nTotal Number of Documents',len(raw))
 
 # Loop to remove Numbers and few symbols
 for i in range(0,len(raw)):
 	only_raw.append(re.sub('[0-9]+', '',raw[i]))
+print('Removed Numbers/Symbols')
 
 # Loop to convert each word into a token
 for i in range(0,len(only_raw)):
 	tokens.append(tokenizer.tokenize(only_raw[i]))
+print('Tokenized the Data')
 
-# Loop to sotre all the tokens eacept those present in stopwords
+# Loop to collect all the tokens except stopwords
 for i in range(0,len(tokens)):
 	new.append([p for p in tokens[i] if not p in stopwords])
+print('Tokenized Data - Stop-Words')
 
 #Loop to 'Lemmatize' each word, ie, Stemm the words, but according to context.
 for i in range(0,len(new)):
 	final.append([lem.lemmatize(p) for p in new[i]])
-
+print('Data Stemmed')
+print("\n")
 
 imp1=[]
 results = []
@@ -95,12 +100,17 @@ for i in range(0,len(final)):
 
 	# Addthe above list corresponding to the 'i'th document to a Dictionary.
 	dictionary = corpora.Dictionary(imp1)
+	print("Dictionary set for the {}st Document".format(i))
 
     # Perform K-Means clustering or Bag of Words clustering for the 'i'th document/list and create a Corpus.
 	corpus = [dictionary.doc2bow(text) for text in imp1]
+	print("Corpus set for the {}st Document".format(i))
+
 
      # Create an LDA Model and pass the Corpus and DIctionary to it, and choose 5 topics with 40 passes
 	ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=5, id2word = dictionary, passes=40)
+	print("LDA set for the {}st Document".format(i))
+
 	# Iterate through each of the 5 topics having 3 words each, and store the topics for each document
 	for j in  ldamodel.show_topics(num_topics=5,num_words=3):
 		for m in range(1,len(j),2):
@@ -109,7 +119,8 @@ for i in range(0,len(final)):
 	total.append(topics)
 	topics=[]
 
-	print('Done',i)
+	print("Topics collected for the {}st Document".format(i))
+	print('\n')
 
 	imp1 = []
 
@@ -133,6 +144,8 @@ for i in range(0,len(final)):
 
 #print(d2)
 
+print("\n Writing into Json file")
+
 # Write into an empty .json file with format: {"_id:":"topics":["topic1","topic2","topic3","topic4","topic5"]}
 with open('output_tm_val.json', 'w') as outfile:  
     for item in d2:
@@ -141,4 +154,4 @@ with open('output_tm_val.json', 'w') as outfile:
     #json.dump(d2, outfile)
 
 
-print('done')
+print('Task Completed')
