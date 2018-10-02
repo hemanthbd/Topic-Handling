@@ -4,7 +4,7 @@ Program to Perform Topic Handling using Latent Dirichlet Allocation (LDA).
 
 ## Files Description
 
-* topic_modeling_data.json - Input Dataset consisting of 1872 documents with corresponding ids.
+* topic_modeling_data.json - Input Dataset consisting of 1837 documents with corresponding ids.
 
 Sample input :
 ```
@@ -48,7 +48,7 @@ Sample Output :
 ```
  {"_id": "abcdef", "topics": ["topic1", "topic2", "topic3", "topic4", "topic5”]}
 ```
-## Implemetation
+## Implementation
 
 * The files were run on 
 ```
